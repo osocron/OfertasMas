@@ -1,10 +1,10 @@
 package controllers
 
 import cats.data.OptionT
+import cats.implicits._
 import io.circe.generic.auto._
 import io.circe.syntax._
 import model.repositories.RepositoryUtils
-import play.api.libs.circe.Circe
 import play.api.mvc._
 import slick.driver.MySQLDriver.api.Table
 import slick.lifted.Rep
@@ -18,23 +18,28 @@ import scala.concurrent.ExecutionContext.Implicits.global
   * @tparam A The TableQuery type parameter
   * @tparam B The TableRow type parameter
   */
-trait ControllerActions[A <: Table[B], B] extends Controller with Circe {
+trait ControllerActions[A <: Table[B], B] extends Controller {
 
   case class Message(error: Boolean = false, message: String)
 
   val addedMsg = Message(error = false, "Agregado satisfactoriamente").asJson.noSpaces
+
+  implicit val encoder: io.circe.Encoder[B]
 
   /**
     * GET method that returns a Json Array of B entities
     *
     * @param repo The repository with the actual implementations
     *             of CRUD operations
-    * @return     A Json Response with the outcome Message
+    * @return A Json Response with the outcome Message
     */
-  def getAction(repo: RepositoryUtils[A, B]) =
-    repo.getAll.map(c => Ok(c.asJson.noSpaces)) recover {
+  def getAction(repo: RepositoryUtils[A, B]) = {
+    (for {
+      c <- repo.getAll
+    } yield Ok(c.asJson.noSpaces)).recover {
       case cause => Ok(Message(error = false, cause.getMessage).asJson.noSpaces)
     }
+  }
 
 
   /**
@@ -42,29 +47,30 @@ trait ControllerActions[A <: Table[B], B] extends Controller with Circe {
     *
     * @param request The implicit HTTP POST request
     * @param repo    The repository with CRUD operations for B
-    * @return        A Json Response with the outcome Message
+    * @return A Json Response with the outcome Message
     */
   def insertAction(request: Request[B], repo: RepositoryUtils[A, B]) = {
-    repo.add(request.body)
-      .map(r => Ok(addedMsg))
-      .recover {
-        case cause =>
-          Ok(Message(error = true, cause.getMessage).asJson.noSpaces)
-      }
+    (for {
+      r <- repo.add(request.body)
+    } yield Ok(addedMsg)).recover {
+      case cause =>
+        Ok(Message(error = true, cause.getMessage).asJson.noSpaces)
+    }
   }
 
   /**
     * GET method that queries for a B given a predicate.
     *
-    * @param repo         The repository with CRUD operations for B
-    * @param notFoundMsg  The Message if a B wasn't found
-    * @param p            The query predicate
-    * @return             A Json Response with the outcome Message
+    * @param repo        The repository with CRUD operations for B
+    * @param notFoundMsg The Message if a B wasn't found
+    * @param p           The query predicate
+    * @return A Json Response with the outcome Message
     */
   def queryAction(repo: RepositoryUtils[A, B],
                   notFoundMsg: String)(p: (A => Rep[Boolean])) = {
-    OptionT(repo.queryByPredicate(p))
-      .map(c => Ok(c.asJson.noSpaces))
+    (for {
+      c <- OptionT(repo.queryByPredicate(p))
+    } yield Ok(c.asJson.noSpaces))
       .getOrElse(Ok(Message(error = false, notFoundMsg).asJson.noSpaces))
   }
 

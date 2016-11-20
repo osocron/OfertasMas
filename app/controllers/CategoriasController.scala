@@ -2,6 +2,8 @@ package controllers
 
 import javax.inject.Inject
 
+import io.circe.Encoder
+import io.circe.generic.semiauto._
 import model.entities.Tables.{Categorias, CategoriasRow}
 import model.repositories.CategoriasRepo
 import play.api.libs.circe.Circe
@@ -11,15 +13,13 @@ import slick.driver.MySQLDriver.api._
 class CategoriasController @Inject()(categoriasRepo: CategoriasRepo)
   extends ControllerActions[Categorias, CategoriasRow] with Circe {
 
-  case class Message(error: Boolean = false, message: String)
+  override implicit val encoder: Encoder[CategoriasRow] = deriveEncoder[CategoriasRow]
 
   def categorias = Action.async { request =>
     getAction(categoriasRepo)
   }
 
   def categoria(idCategoria: Int) = Action.async { request =>
-    queryAction(categoriasRepo,
-      "Categoría no encontrada")(_.idCategoria === idCategoria)
+    queryAction(categoriasRepo, "Categoria no encontrada")(_.idCategoria === idCategoria)
   }
-
 }

@@ -15,6 +15,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % "0.6.0",
   "play-circe" %% "play-circe" % "2.5-0.6.0")
 
+resolvers += "Bintary JCenter" at "http://jcenter.bintray.com"
+
 unmanagedResourceDirectories in Test <+=  baseDirectory ( _ /"target/web/public/test" )  
 
 resolvers += "scalaz-bintray" at "https://dl.bintray.com/scalaz/releases"  
