@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.Inject
 
-import io.circe.Encoder
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.semiauto._
 import model.entities.Tables.{Ciudades, CiudadesRow}
 import model.repositories.CiudadesRepo
@@ -17,6 +17,8 @@ class CiudadesController @Inject()(ciudadesRepo: CiudadesRepo)
   extends ControllerActions[Ciudades, CiudadesRow] with Circe {
 
   override implicit val encoder: Encoder[CiudadesRow] = deriveEncoder[CiudadesRow]
+
+  override implicit val decoder: Decoder[CiudadesRow] = deriveDecoder[CiudadesRow]
 
   def ciudades = Action.async { request =>
     getAction(ciudadesRepo)

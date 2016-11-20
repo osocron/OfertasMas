@@ -58,7 +58,7 @@ trait RepositoryUtils[A <: Table[B], B] extends HasDatabaseConfigProvider[JdbcPr
     * @param e The element to be added
     * @return  `ok` if the element was successfully added or the exception message otherwise.
     */
-  def add(e: B): Future[B] = db.run((t returning t) += e)
+  def add(e: B): Future[Int] = db.run(t += e)
 
   /**
     * Deletes elements based on a predicate.

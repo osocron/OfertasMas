@@ -2,7 +2,7 @@ package controllers
 
 import cats.data.OptionT
 import cats.implicits._
-import io.circe.Encoder
+import io.circe.{Decoder, Encoder}
 import io.circe.generic.auto._
 import io.circe.syntax._
 import model.repositories.RepositoryUtils
@@ -26,6 +26,12 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
   val addedMsg = Message(error = false, "Agregado satisfactoriamente").asJson.noSpaces
 
   implicit val encoder: Encoder[B]
+
+  implicit val decoder: Decoder[B]
+
+  implicit val decodeDate: Decoder[java.sql.Date] = Decoder.decodeString.emap { str =>
+    Either.catchNonFatal(java.sql.Date.valueOf(str)).leftMap(d => "Date")
+  }
 
   /**
     * GET method that returns a Json Array of B entities
