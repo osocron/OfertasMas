@@ -22,4 +22,5 @@ class CategoriasController @Inject()(categoriasRepo: CategoriasRepo)
   def categoria(idCategoria: Int) = Action.async { request =>
     queryAction(categoriasRepo, "Categoria no encontrada")(_.idCategoria === idCategoria)
   }
+
 }

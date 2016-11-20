@@ -2,6 +2,7 @@ package controllers
 
 import cats.data.OptionT
 import cats.implicits._
+import io.circe.Encoder
 import io.circe.generic.auto._
 import io.circe.syntax._
 import model.repositories.RepositoryUtils
@@ -12,7 +13,7 @@ import slick.lifted.Rep
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
-  * This Trait abstract over the most common CRUD operations on
+  * This Trait abstracts over the most common CRUD operations on
   * database entities used inside a RESTful context.
   *
   * @tparam A The TableQuery type parameter
@@ -24,7 +25,7 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
 
   val addedMsg = Message(error = false, "Agregado satisfactoriamente").asJson.noSpaces
 
-  implicit val encoder: io.circe.Encoder[B]
+  implicit val encoder: Encoder[B]
 
   /**
     * GET method that returns a Json Array of B entities
