@@ -22,6 +22,7 @@ POST    /api/cupon                              controllers.CuponController.nuev
 # Empresas
 GET     /api/empresas                       controllers.EmpresasController.empresas
 GET     /api/empresa/:idEmpresa             controllers.EmpresasController.empresa(idEmpresa: Int)
+GET     /api/empresaPorOferta/:idOferta     controllers.EmpresasController.empresaPorOferta(idOferta: Int)
 
 # Estados
 GET     /api/estados                        controllers.EstadosController.estados
