@@ -34,6 +34,18 @@ trait RepositoryUtils[A <: Table[B], B] extends HasDatabaseConfigProvider[JdbcPr
   }
 
   /**
+    * Similar to the one above but it retrieves all matches in a Seq
+    *
+    * @param p The predicate to be applied
+    * @return  The possibility of a future computation that contains
+    *          a [[scala.collection.Seq]] of `B`
+    */
+  def queryAllByPredicate (p: (A => Rep[Boolean])): Future[Seq[B]] = {
+    val query = t.filter(p)
+    db.run(query.result)
+  }
+
+  /**
     * Queries a table and gets all the results
     *
     * @return  The possibility of a future computation containing a

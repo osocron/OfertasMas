@@ -20,30 +20,31 @@ GET     /api/cuponesPorUsuario/:correoUsuario   controllers.CuponController.cupo
 POST    /api/cupon                              controllers.CuponController.nuevoCupon
 
 # Empresas
-GET     /api/empresas                   controllers.EmpresasController.empresas
-GET     /api/empresa/:idEmpresa         controllers.EmpresasController.empresa(idEmpresa: Int)
+GET     /api/empresas                       controllers.EmpresasController.empresas
+GET     /api/empresa/:idEmpresa             controllers.EmpresasController.empresa(idEmpresa: Int)
 
 # Estados
-GET     /api/estados                    controllers.EstadosController.estados
-GET     /api/estado/:idEstado           controllers.EstadosController.estado(idEstado: Int)
+GET     /api/estados                        controllers.EstadosController.estados
+GET     /api/estado/:idEstado               controllers.EstadosController.estado(idEstado: Int)
 
 # Ofertas
-GET     /api/ofertas                    controllers.OfertasController.ofertas
-GET     /api/oferta/:idOferta           controllers.OfertasController.oferta(idOferta: Int)
+GET     /api/ofertas                        controllers.OfertasController.ofertas
+GET     /api/oferta/:idOferta               controllers.OfertasController.oferta(idOferta: Int)
+GET     /api/ofertaPorCategoria/:categoria  controllers.OfertasController.ofertasPorCategorias(categoria: String)
 
 # RCategoriaOferta
-GET     /api/rCategoriaOfertas          controllers.RCategoriaOfertaController.rCategoriaOfertas
-GET     /api/rCategoriaOferta/:id       controllers.RCategoriaOfertaController.rCategoriaOferta(id: Int)
+GET     /api/rCategoriaOfertas              controllers.RCategoriaOfertaController.rCategoriaOfertas
+GET     /api/rCategoriaOferta/:id           controllers.RCategoriaOfertaController.rCategoriaOferta(id: Int)
 
 # ROfertaCiudad
-GET     /api/rOfertaCiudades            controllers.ROfertaCiudadController.rOfertaCiudades
-GET     /api/rOfertaCiudad/:idOferta    controllers.ROfertaCiudadController.rOfertaCiudad(idOferta: Int)
+GET     /api/rOfertaCiudades                controllers.ROfertaCiudadController.rOfertaCiudades
+GET     /api/rOfertaCiudad/:idOferta        controllers.ROfertaCiudadController.rOfertaCiudad(idOferta: Int)
 
 # Usuarios
-GET     /api/usuarios                   controllers.UsuarioController.usuarios
-GET     /api/usuario/:correo            controllers.UsuarioController.usuario(correo: String)
+GET     /api/usuarios                       controllers.UsuarioController.usuarios
+GET     /api/usuario/:correo                controllers.UsuarioController.usuario(correo: String)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file                   controllers.Assets.at(path="/public", file)
+GET     /assets/*file                       controllers.Assets.at(path="/public", file)
 
     

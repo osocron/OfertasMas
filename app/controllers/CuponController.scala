@@ -9,7 +9,6 @@ import model.repositories.CuponRepo
 import play.api.libs.circe.Circe
 import play.api.mvc._
 import slick.driver.MySQLDriver.api._
-import cats.syntax.either._
 
 /**
   * Created by osocron on 20/11/16.
