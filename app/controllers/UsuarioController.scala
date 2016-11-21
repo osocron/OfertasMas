@@ -28,4 +28,8 @@ class UsuarioController @Inject()(usuarioRepo: UsuarioRepo)
     queryAction(usuarioRepo, "Usuario no encontrado")(_.correoUsuario === correoUsuario)
   }
 
+  def nuevoUsuario = Action.async(circe.json[UsuarioRow]) { request =>
+    insertAction(request, usuarioRepo)
+  }
+
 }
