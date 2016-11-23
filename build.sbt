@@ -10,9 +10,9 @@ libraryDependencies ++= Seq(
   jdbc, cache, ws, specs2 % Test,
   "mysql" % "mysql-connector-java" % "5.1.38",
   "com.typesafe.play" %% "play-slick" % "2.0.0",
-  "io.circe" %% "circe-core" % "0.6.0",
-  "io.circe" %% "circe-generic" % "0.6.0",
-  "io.circe" %% "circe-parser" % "0.6.0",
+  "io.circe" %% "circe-core" % "0.6.1",
+  "io.circe" %% "circe-generic" % "0.6.1",
+  "io.circe" %% "circe-parser" % "0.6.1",
   "play-circe" %% "play-circe" % "2.5-0.6.0")
 
 resolvers += "Bintary JCenter" at "http://jcenter.bintray.com"

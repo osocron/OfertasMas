@@ -16,28 +16,23 @@ import slick.driver.MySQLDriver.api._
 class CuponController @Inject()(cuponRepo: CuponRepo)
   extends ControllerActions[Cupon, CuponRow] with Circe {
 
-  override implicit val encoder: Encoder[CuponRow] =
-    Encoder.forProduct4(
-      "codigoCupon",
-      "vigenciaCupon",
-      "idOferta",
-      "idUsuario")(c => (c.codigoCupon, c.vigenciaCupon.toString, c.idOferta, c.idUsuario))
+  override implicit val encoder: Encoder[CuponRow] = deriveEncoder[CuponRow]
 
   override implicit val decoder: Decoder[CuponRow] = deriveDecoder[CuponRow]
 
-  def cupones = Action.async { request =>
+  def cupones: Action[AnyContent] = Action.async { request =>
     getAction(cuponRepo)
   }
 
-  def cupon(codigoCupon: String) = Action.async { request =>
+  def cupon(codigoCupon: String): Action[AnyContent] = Action.async { request =>
     queryAction(cuponRepo, "Cupon no encontrado")(_.codigoCupon === codigoCupon)
   }
 
-  def nuevoCupon = Action.async(circe.json[CuponRow]) { request =>
+  def nuevoCupon: Action[_root_.model.entities.Tables.CuponRow] = Action.async(circe.json[CuponRow]) { request =>
     insertAction(request, cuponRepo)
   }
 
-  def cuponesPorUsuario(correoUsuario: String) = Action.async { request =>
+  def cuponesPorUsuario(correoUsuario: String): Action[AnyContent] = Action.async { request =>
     queryAction(cuponRepo, "Cupones no encontrados")(_.idUsuario === correoUsuario)
   }
 

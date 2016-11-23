@@ -20,11 +20,11 @@ class EstadosController @Inject()(estadosRepo: EstadosRepo)
 
   override implicit val decoder: Decoder[EstadosRow] = deriveDecoder[EstadosRow]
 
-  def estados = Action.async { request =>
+  def estados: Action[AnyContent] = Action.async { request =>
     getAction(estadosRepo)
   }
 
-  def estado(idEstado: Int) = Action.async { request =>
+  def estado(idEstado: Int): Action[AnyContent] = Action.async { request =>
     queryAction(estadosRepo, "Estado no encontrado")(_.idEstado === idEstado)
   }
 

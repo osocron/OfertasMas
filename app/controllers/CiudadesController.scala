@@ -20,12 +20,16 @@ class CiudadesController @Inject()(ciudadesRepo: CiudadesRepo)
 
   override implicit val decoder: Decoder[CiudadesRow] = deriveDecoder[CiudadesRow]
 
-  def ciudades = Action.async { request =>
+  def ciudades: Action[AnyContent] = Action.async { request =>
     getAction(ciudadesRepo)
   }
 
-  def ciudad(idCiudad: Int) = Action.async { request =>
+  def ciudad(idCiudad: Int): Action[AnyContent] = Action.async { request =>
     queryAction(ciudadesRepo, "Ciudad no encontrada")(_.idCiudad === idCiudad)
+  }
+
+  def ciudadesPorEstado(idEstado: Int): Action[AnyContent] = Action.async { request =>
+    queryAllAction(ciudadesRepo)(_.idEstado === idEstado)
   }
 
 }

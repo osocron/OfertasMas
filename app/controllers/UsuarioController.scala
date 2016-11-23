@@ -20,15 +20,15 @@ class UsuarioController @Inject()(usuarioRepo: UsuarioRepo)
 
   override implicit val decoder: Decoder[UsuarioRow] = deriveDecoder[UsuarioRow]
 
-  def usuarios = Action.async { request =>
+  def usuarios: Action[AnyContent] = Action.async { request =>
     getAction(usuarioRepo)
   }
 
-  def usuario(correoUsuario: String) = Action.async { request =>
+  def usuario(correoUsuario: String): Action[AnyContent] = Action.async { request =>
     queryAction(usuarioRepo, "Usuario no encontrado")(_.correoUsuario === correoUsuario)
   }
 
-  def nuevoUsuario = Action.async(circe.json[UsuarioRow]) { request =>
+  def nuevoUsuario: Action[UsuarioRow] = Action.async(circe.json[UsuarioRow]) { request =>
     insertAction(request, usuarioRepo)
   }
 

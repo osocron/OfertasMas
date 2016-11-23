@@ -24,19 +24,19 @@ class OfertasController @Inject()(ofertasRepo: OfertasRepo)
 
   override implicit val decoder: Decoder[OfertasRow] = deriveDecoder[OfertasRow]
 
-  def ofertas = Action.async { request =>
+  def ofertas: Action[AnyContent] = Action.async { request =>
     getAction(ofertasRepo)
   }
 
-  def oferta(idOferta: Int) = Action.async { request =>
+  def oferta(idOferta: Int): Action[AnyContent] = Action.async { request =>
     queryAction(ofertasRepo, "Oferta no encontrada")(_.idOferta === idOferta)
   }
 
-  def ofertaPorNombre(nombreOferta: String) = Action.async { request =>
+  def ofertaPorNombre(nombreOferta: String): Action[AnyContent] = Action.async { request =>
     queryAction(ofertasRepo, "Oferta no encontrada")(_.nombreOferta === nombreOferta)
   }
 
-  def ofertasPorCategorias(categoria: String) = Action.async { request =>
+  def ofertasPorCategorias(categoria: String): Action[AnyContent] = Action.async { request =>
     (for {
       ofertas <- ofertasRepo.getOfertasPorCategoria(categoria)
     } yield Ok(ofertas.asJson.noSpaces))

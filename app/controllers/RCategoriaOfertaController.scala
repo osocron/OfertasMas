@@ -20,11 +20,11 @@ class RCategoriaOfertaController @Inject()(rCategoriaOfertaRepo: RCategoriaOfert
 
   override implicit val decoder: Decoder[RCategoriaOfertaRow] = deriveDecoder[RCategoriaOfertaRow]
 
-  def rCategoriaOfertas = Action.async { request =>
+  def rCategoriaOfertas: Action[AnyContent] = Action.async { request =>
     getAction(rCategoriaOfertaRepo)
   }
 
-  def rCategoriaOferta(idRCategoriaOferta: Int) = Action.async { request =>
+  def rCategoriaOferta(idRCategoriaOferta: Int): Action[AnyContent] = Action.async { request =>
     queryAction(rCategoriaOfertaRepo, "Relacion no encontrada")(_.idRCategoriaOferta === idRCategoriaOferta)
   }
 

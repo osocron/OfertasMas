@@ -25,15 +25,15 @@ class EmpresasController @Inject()(empresasRepo: EmpresasRepo)
 
   override implicit val decoder: Decoder[EmpresasRow] = deriveDecoder[EmpresasRow]
 
-  def empresas = Action.async { request =>
+  def empresas: Action[AnyContent] = Action.async { request =>
     getAction(empresasRepo)
   }
 
-  def empresa(idEmpresa: Int) = Action.async { request =>
+  def empresa(idEmpresa: Int): Action[AnyContent] = Action.async { request =>
     queryAction(empresasRepo, "Empresa no encontrada")(_.idEmpresa === idEmpresa)
   }
 
-  def empresaPorOferta(idOferta: Int) = Action.async { request =>
+  def empresaPorOferta(idOferta: Int): Action[AnyContent] = Action.async { request =>
     empresasRepo.getEmpresaPorOferta(idOferta).flatMap {
       case Some(e) => Future.successful(Ok(e.asJson.noSpaces))
       case None   =>  Future.successful(

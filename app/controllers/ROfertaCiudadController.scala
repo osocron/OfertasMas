@@ -20,11 +20,11 @@ class ROfertaCiudadController @Inject()(rOfertaCiudadRepo: ROfertaCiudadRepo)
 
   override implicit val decoder: Decoder[ROfertaCuidadRow] = deriveDecoder[ROfertaCuidadRow]
 
-  def rOfertaCiudades = Action.async { request =>
+  def rOfertaCiudades: Action[AnyContent] = Action.async { request =>
     getAction(rOfertaCiudadRepo)
   }
 
-  def rOfertaCiudad(idROfertaCiudad: Int) = Action.async { request =>
+  def rOfertaCiudad(idROfertaCiudad: Int): Action[AnyContent] = Action.async { request =>
     queryAction(rOfertaCiudadRepo, "Relacion no encontrada")(_.idROfertaCuidad === idROfertaCiudad)
   }
 

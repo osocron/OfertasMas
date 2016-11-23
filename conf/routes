@@ -10,8 +10,9 @@ GET     /api/categorias                 controllers.CategoriasController.categor
 GET     /api/categoria/:idCategoria     controllers.CategoriasController.categoria(idCategoria: Int)
 
 # Ciudades
-GET     /api/ciudades                   controllers.CiudadesController.ciudades
-GET     /api/ciudad/:id                 controllers.CiudadesController.ciudad(id: Int)
+GET     /api/ciudades                       controllers.CiudadesController.ciudades
+GET     /api/ciudad/:id                     controllers.CiudadesController.ciudad(id: Int)
+GET     /api/ciudadesPorEstado/:idEstado    controllers.CiudadesController.ciudadesPorEstado(idEstado: Int)
 
 # Cupones
 GET     /api/cupones                            controllers.CuponController.cupones

@@ -11,6 +11,7 @@ import slick.driver.MySQLDriver.api.Table
 import slick.lifted.Rep
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 /**
   * This Trait abstracts over the most common CRUD operations on
@@ -23,13 +24,15 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
 
   case class Message(error: Boolean = false, message: String)
 
-  val addedMsg = Message(error = false, "Agregado satisfactoriamente").asJson.noSpaces
+  val addedMsg: String = Message(error = false, "Agregado satisfactoriamente").asJson.noSpaces
 
   implicit val encoder: Encoder[B]
 
   implicit val decoder: Decoder[B]
 
-  implicit val decodeDate: Decoder[java.sql.Date] = Decoder.decodeString.emap { str =>
+  implicit val encodeSQLDate: Encoder[java.sql.Date] = Encoder.encodeString.contramap[java.sql.Date](_.toString)
+
+  implicit val decodeSQLDate: Decoder[java.sql.Date] = Decoder.decodeString.emap { str =>
     Either.catchNonFatal(java.sql.Date.valueOf(str)).leftMap(d => "Date")
   }
 
@@ -40,7 +43,7 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
     *             of CRUD operations
     * @return A Json Response with the outcome Message
     */
-  def getAction(repo: RepositoryUtils[A, B]) = {
+  def getAction(repo: RepositoryUtils[A, B]): Future[Result] = {
     (for {
       c <- repo.getAll
     } yield Ok(c.asJson.noSpaces)).recover {
@@ -56,7 +59,7 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
     * @param repo    The repository with CRUD operations for B
     * @return A Json Response with the outcome Message
     */
-  def insertAction(request: Request[B], repo: RepositoryUtils[A, B]) = {
+  def insertAction(request: Request[B], repo: RepositoryUtils[A, B]): Future[Result] = {
     (for {
       r <- repo.add(request.body)
     } yield Ok(addedMsg)).recover {
@@ -74,11 +77,26 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
     * @return A Json Response with the outcome Message
     */
   def queryAction(repo: RepositoryUtils[A, B],
-                  notFoundMsg: String)(p: (A => Rep[Boolean])) = {
+                  notFoundMsg: String)(p: (A => Rep[Boolean])): Future[Result] = {
     (for {
       c <- OptionT(repo.queryByPredicate(p))
     } yield Ok(c.asJson.noSpaces))
       .getOrElse(Ok(Message(error = false, notFoundMsg).asJson.noSpaces))
+  }
+
+  /**
+    * GET method that queries for a seq of B given a predicate.
+    *
+    * @param repo        The repository with CRUD operations for B
+    * @param p           The query predicate
+    * @return            A Json Response with the outcome Message
+    */
+  def queryAllAction(repo: RepositoryUtils[A, B])(p: (A => Rep[Boolean])): Future[Result] = {
+    (for {
+      seqB <- repo.queryAllByPredicate(p)
+    } yield Ok(seqB.asJson.noSpaces)).recover {
+      case cause => Ok(Message(error = false, cause.getMessage).asJson.noSpaces)
+    }
   }
 
 }

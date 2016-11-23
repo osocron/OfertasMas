@@ -17,11 +17,11 @@ class CategoriasController @Inject()(categoriasRepo: CategoriasRepo)
 
   override implicit val decoder: Decoder[CategoriasRow] = deriveDecoder[CategoriasRow]
 
-  def categorias = Action.async { request =>
+  def categorias: Action[AnyContent] = Action.async { request =>
     getAction(categoriasRepo)
   }
 
-  def categoria(idCategoria: Int) = Action.async { request =>
+  def categoria(idCategoria: Int): Action[AnyContent] = Action.async { request =>
     queryAction(categoriasRepo, "Categoria no encontrada")(_.idCategoria === idCategoria)
   }
 
