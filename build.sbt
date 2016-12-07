@@ -2,7 +2,7 @@ name := "OfertasMas"
 
 version := "1.0"
 
-lazy val `ofertasmas` = (project in file(".")).enablePlugins(PlayScala)
+lazy val `ofertasmas` = (project in file(".")).enablePlugins(PlayScala, LauncherJarPlugin)
 
 scalaVersion := "2.11.7"
 

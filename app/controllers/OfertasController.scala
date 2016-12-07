@@ -36,9 +36,16 @@ class OfertasController @Inject()(ofertasRepo: OfertasRepo)
     queryAction(ofertasRepo, "Oferta no encontrada")(_.nombreOferta === nombreOferta)
   }
 
-  def ofertasPorCategorias(categoria: String): Action[AnyContent] = Action.async { request =>
+  def ofertasPorCategorias(nombreCategoria: String): Action[AnyContent] = Action.async { request =>
     (for {
-      ofertas <- ofertasRepo.getOfertasPorCategoria(categoria)
+      ofertas <- ofertasRepo.getOfertasPorCategoria(nombreCategoria)
+    } yield Ok(ofertas.asJson.noSpaces))
+      .recover { case cause => Ok(Message(error = true, cause.getMessage).asJson.noSpaces) }
+  }
+
+  def ofertasPorCiudadCategoria(idCiudad: Int, idCategoria: Int): Action[AnyContent] = Action.async { request =>
+    (for {
+      ofertas <- ofertasRepo.getOfertasPorCiudadCategoria(idCiudad, idCategoria)
     } yield Ok(ofertas.asJson.noSpaces))
       .recover { case cause => Ok(Message(error = true, cause.getMessage).asJson.noSpaces) }
   }

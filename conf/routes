@@ -30,9 +30,10 @@ GET     /api/estados                        controllers.EstadosController.estado
 GET     /api/estado/:idEstado               controllers.EstadosController.estado(idEstado: Int)
 
 # Ofertas
-GET     /api/ofertas                        controllers.OfertasController.ofertas
-GET     /api/oferta/:idOferta               controllers.OfertasController.oferta(idOferta: Int)
-GET     /api/ofertaPorCategoria/:categoria  controllers.OfertasController.ofertasPorCategorias(categoria: String)
+GET     /api/ofertas                                controllers.OfertasController.ofertas
+GET     /api/oferta/:idOferta                       controllers.OfertasController.oferta(idOferta: Int)
+GET     /api/ofertas/:idCiudad/:idCategoria         controllers.OfertasController.ofertasPorCiudadCategoria(idCiudad: Int, idCategoria: Int)
+GET     /api/ofertaPorCategoria/:nombreCategoria    controllers.OfertasController.ofertasPorCategorias(nombreCategoria: String)
 
 # RCategoriaOferta
 GET     /api/rCategoriaOfertas              controllers.RCategoriaOfertaController.rCategoriaOfertas
