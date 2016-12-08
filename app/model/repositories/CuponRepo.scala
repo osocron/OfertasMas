@@ -34,7 +34,7 @@ class CuponRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
 
   def vencio(timestamp: Timestamp): Boolean = {
     val fiveDays: Long = 5 * 24 * 60 * 60 * 1000
-    timestamp.getTime + fiveDays > Calendar.getInstance().getTime.getTime
+    timestamp.getTime + fiveDays < Calendar.getInstance().getTime.getTime
   }
 
 }

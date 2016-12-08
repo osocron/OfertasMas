@@ -22,9 +22,9 @@ import scala.concurrent.Future
   */
 trait ControllerActions[A <: Table[B], B] extends Controller {
 
-  case class Message(error: Boolean = false, message: String)
+  case class Mensaje(error: Boolean = false, mensaje: String)
 
-  val addedMsg: String = Message(error = false, "Agregado satisfactoriamente").asJson.noSpaces
+  val addedMsg: String = Mensaje(error = false, "Agregado satisfactoriamente").asJson.noSpaces
 
   implicit val encoder: Encoder[B]
 
@@ -53,7 +53,7 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
     (for {
       c <- repo.getAll
     } yield Ok(c.asJson.noSpaces)).recover {
-      case cause => Ok(Message(error = false, cause.getMessage).asJson.noSpaces)
+      case cause => Ok(Mensaje(error = false, cause.getMessage).asJson.noSpaces)
     }
   }
 
@@ -70,7 +70,7 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
       r <- repo.add(request.body)
     } yield Ok(addedMsg)).recover {
       case cause =>
-        Ok(Message(error = true, cause.getMessage).asJson.noSpaces)
+        Ok(Mensaje(error = true, cause.getMessage).asJson.noSpaces)
     }
   }
 
@@ -87,7 +87,7 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
     (for {
       c <- OptionT(repo.queryByPredicate(p))
     } yield Ok(c.asJson.noSpaces))
-      .getOrElse(Ok(Message(error = false, notFoundMsg).asJson.noSpaces))
+      .getOrElse(Ok(Mensaje(error = false, notFoundMsg).asJson.noSpaces))
   }
 
   /**
@@ -101,7 +101,7 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
     (for {
       seqB <- repo.queryAllByPredicate(p)
     } yield Ok(seqB.asJson.noSpaces)).recover {
-      case cause => Ok(Message(error = false, cause.getMessage).asJson.noSpaces)
+      case cause => Ok(Mensaje(error = false, cause.getMessage).asJson.noSpaces)
     }
   }
 

@@ -37,7 +37,7 @@ class EmpresasController @Inject()(empresasRepo: EmpresasRepo)
     empresasRepo.getEmpresaPorOferta(idOferta).flatMap {
       case Some(e) => Future.successful(Ok(e.asJson.noSpaces))
       case None   =>  Future.successful(
-        Ok(Message(error = false, "Empresa no encontrada").asJson.noSpaces)
+        Ok(Mensaje(error = false, "Empresa no encontrada").asJson.noSpaces)
       )
     }
   }

@@ -49,7 +49,7 @@ class OfertasController @Inject()(ofertasRepo: OfertasRepo)
     (for {
       ofertas <- b
     } yield Ok(ofertas.asJson.noSpaces))
-      .recover { case cause => Ok(Message(error = true, cause.getMessage).asJson.noSpaces) }
+      .recover { case cause => Ok(Mensaje(error = true, cause.getMessage).asJson.noSpaces) }
   }
 
 }
