@@ -45,7 +45,7 @@ class UsuarioController @Inject()(usuarioRepo: UsuarioRepo)
       b <- usuarioRepo.queryIfExists(u => u.correoUsuario === correo && u.contrasenaUsuario === password)
     } yield
       if (b) Ok(Message(error = false, "Encontrado").asJson.noSpaces)
-      else Ok(Message(error = true, "Usuadio no encontrado").asJson.noSpaces)).head
+      else Ok(Message(error = true, "Usuario no encontrado").asJson.noSpaces)).head
   }
 
 }

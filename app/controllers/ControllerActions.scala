@@ -33,7 +33,13 @@ trait ControllerActions[A <: Table[B], B] extends Controller {
   implicit val encodeSQLDate: Encoder[java.sql.Date] = Encoder.encodeString.contramap[java.sql.Date](_.toString)
 
   implicit val decodeSQLDate: Decoder[java.sql.Date] = Decoder.decodeString.emap { str =>
-    Either.catchNonFatal(java.sql.Date.valueOf(str)).leftMap(d => "Date")
+    Either.catchNonFatal(java.sql.Date.valueOf(str)).leftMap(_ => "Date")
+  }
+
+  implicit val encodeTimestamp: Encoder[java.sql.Timestamp] = Encoder.encodeString.contramap[java.sql.Timestamp](_.toString)
+
+  implicit val decodeTimestamp: Decoder[java.sql.Timestamp] = Decoder.decodeString.emap { str =>
+    Either.catchNonFatal(java.sql.Timestamp.valueOf(str)).leftMap(_ => "Timestamp")
   }
 
   /**

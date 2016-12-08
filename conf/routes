@@ -16,7 +16,7 @@ GET     /api/ciudadesPorEstado/:idEstado    controllers.CiudadesController.ciuda
 
 # Cupones
 GET     /api/cupones                            controllers.CuponController.cupones
-GET     /api/cupon/:codigoCupon                 controllers.CuponController.cupon(codigoCupon: String)
+GET     /api/cupon/:codigoCupon                 controllers.CuponController.cupon(codigoCupon: Int)
 GET     /api/cuponesPorUsuario/:correoUsuario   controllers.CuponController.cuponesPorUsuario(correoUsuario: String)
 POST    /api/cupon                              controllers.CuponController.nuevoCupon
 

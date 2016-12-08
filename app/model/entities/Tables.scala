@@ -1,4 +1,6 @@
 package model.entities
+
+import slick.profile.SqlProfile.ColumnOption.SqlType
 // AUTO-GENERATED Slick data model
 /** Stand-alone Slick data model for immediate use */
 object Tables extends {
@@ -14,7 +16,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema = Array(Categorias.schema, Ciudades.schema, Cupon.schema, Empresas.schema, Estados.schema, Ofertas.schema, RCategoriaOferta.schema, ROfertaCuidad.schema, Usuario.schema).reduceLeft(_ ++ _)
+  lazy val schema = Array(Categorias.schema, Ciudades.schema, Cupon.schema, Empresas.schema, EstadoCupon.schema, Estados.schema, Ofertas.schema, RCategoriaOferta.schema, ROfertaCuidad.schema, Usuario.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -71,31 +73,36 @@ trait Tables {
   lazy val Ciudades = new TableQuery(tag => new Ciudades(tag))
 
   /** Entity class storing rows of table Cupon
-   *  @param codigoCupon Database column codigo_cupon SqlType(VARCHAR), PrimaryKey, Length(15,true)
-   *  @param vigenciaCupon Database column vigencia_cupon SqlType(DATE)
+   *  @param codigoCupon Database column codigo_cupon SqlType(INT), AutoInc, PrimaryKey
+   *  @param fechaCreacion Database column fecha_creacion SqlType(TIMESTAMP)
    *  @param idOferta Database column id_oferta SqlType(INT)
-   *  @param idUsuario Database column id_usuario SqlType(VARCHAR), Length(100,true) */
-  case class CuponRow(codigoCupon: String, vigenciaCupon: java.sql.Date, idOferta: Int, idUsuario: String)
+   *  @param idUsuario Database column id_usuario SqlType(VARCHAR), Length(100,true)
+   *  @param idEstadoCupon Database column id_estado_cupon SqlType(INT) */
+  case class CuponRow(codigoCupon: Int, fechaCreacion: java.sql.Timestamp, idOferta: Int, idUsuario: String, idEstadoCupon: Int)
   /** GetResult implicit for fetching CuponRow objects using plain SQL queries */
-  implicit def GetResultCuponRow(implicit e0: GR[String], e1: GR[java.sql.Date], e2: GR[Int]): GR[CuponRow] = GR{
+  implicit def GetResultCuponRow(implicit e0: GR[Int], e1: GR[java.sql.Timestamp], e2: GR[String]): GR[CuponRow] = GR{
     prs => import prs._
-    CuponRow.tupled((<<[String], <<[java.sql.Date], <<[Int], <<[String]))
+    CuponRow.tupled((<<[Int], <<[java.sql.Timestamp], <<[Int], <<[String], <<[Int]))
   }
   /** Table description of table cupon. Objects of this class serve as prototypes for rows in queries. */
   class Cupon(_tableTag: Tag) extends Table[CuponRow](_tableTag, "cupon") {
-    def * = (codigoCupon, vigenciaCupon, idOferta, idUsuario) <> (CuponRow.tupled, CuponRow.unapply)
+    def * = (codigoCupon, fechaCreacion, idOferta, idUsuario, idEstadoCupon) <> (CuponRow.tupled, CuponRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = (Rep.Some(codigoCupon), Rep.Some(vigenciaCupon), Rep.Some(idOferta), Rep.Some(idUsuario)).shaped.<>({r=>import r._; _1.map(_=> CuponRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = (Rep.Some(codigoCupon), Rep.Some(fechaCreacion), Rep.Some(idOferta), Rep.Some(idUsuario), Rep.Some(idEstadoCupon)).shaped.<>({r=>import r._; _1.map(_=> CuponRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
-    /** Database column codigo_cupon SqlType(VARCHAR), PrimaryKey, Length(15,true) */
-    val codigoCupon: Rep[String] = column[String]("codigo_cupon", O.PrimaryKey, O.Length(15,varying=true))
-    /** Database column vigencia_cupon SqlType(DATE) */
-    val vigenciaCupon: Rep[java.sql.Date] = column[java.sql.Date]("vigencia_cupon")
+    /** Database column codigo_cupon SqlType(INT), AutoInc, PrimaryKey */
+    val codigoCupon: Rep[Int] = column[Int]("codigo_cupon", O.AutoInc, O.PrimaryKey)
+    /** Database column fecha_creacion SqlType(TIMESTAMP) */
+    val fechaCreacion: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("fecha_creacion", SqlType("TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP"))
     /** Database column id_oferta SqlType(INT) */
     val idOferta: Rep[Int] = column[Int]("id_oferta")
     /** Database column id_usuario SqlType(VARCHAR), Length(100,true) */
     val idUsuario: Rep[String] = column[String]("id_usuario", O.Length(100,varying=true))
+    /** Database column id_estado_cupon SqlType(INT) */
+    val idEstadoCupon: Rep[Int] = column[Int]("id_estado_cupon")
 
+    /** Foreign key referencing EstadoCupon (database name fk_cupon_estado_cupon) */
+    lazy val estadoCuponFk = foreignKey("fk_cupon_estado_cupon", idEstadoCupon, EstadoCupon)(r => r.idEstadoCupon, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
     /** Foreign key referencing Ofertas (database name fk_oferta_cupon) */
     lazy val ofertasFk = foreignKey("fk_oferta_cupon", idOferta, Ofertas)(r => r.idOferta, onUpdate=ForeignKeyAction.NoAction, onDelete=ForeignKeyAction.NoAction)
     /** Foreign key referencing Usuario (database name fk_cupon_usuario) */
@@ -132,6 +139,29 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table Empresas */
   lazy val Empresas = new TableQuery(tag => new Empresas(tag))
+
+  /** Entity class storing rows of table EstadoCupon
+   *  @param idEstadoCupon Database column id_estado_cupon SqlType(INT), PrimaryKey
+   *  @param estadoCupon Database column estado_cupon SqlType(VARCHAR), Length(45,true) */
+  case class EstadoCuponRow(idEstadoCupon: Int, estadoCupon: String)
+  /** GetResult implicit for fetching EstadoCuponRow objects using plain SQL queries */
+  implicit def GetResultEstadoCuponRow(implicit e0: GR[Int], e1: GR[String]): GR[EstadoCuponRow] = GR{
+    prs => import prs._
+    EstadoCuponRow.tupled((<<[Int], <<[String]))
+  }
+  /** Table description of table estado_cupon. Objects of this class serve as prototypes for rows in queries. */
+  class EstadoCupon(_tableTag: Tag) extends Table[EstadoCuponRow](_tableTag, "estado_cupon") {
+    def * = (idEstadoCupon, estadoCupon) <> (EstadoCuponRow.tupled, EstadoCuponRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = (Rep.Some(idEstadoCupon), Rep.Some(estadoCupon)).shaped.<>({r=>import r._; _1.map(_=> EstadoCuponRow.tupled((_1.get, _2.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id_estado_cupon SqlType(INT), PrimaryKey */
+    val idEstadoCupon: Rep[Int] = column[Int]("id_estado_cupon", O.PrimaryKey)
+    /** Database column estado_cupon SqlType(VARCHAR), Length(45,true) */
+    val estadoCupon: Rep[String] = column[String]("estado_cupon", O.Length(45,varying=true))
+  }
+  /** Collection-like TableQuery object for table EstadoCupon */
+  lazy val EstadoCupon = new TableQuery(tag => new EstadoCupon(tag))
 
   /** Entity class storing rows of table Estados
    *  @param idEstado Database column id_estado SqlType(INT), AutoInc, PrimaryKey
