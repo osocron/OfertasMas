@@ -32,6 +32,12 @@ class CuponRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider
       }
   }
 
+  def canjear(codigoCupon: Int)(implicit ec: ExecutionContext): Future[Int] = {
+    val q = for {c <- Cupon if c.codigoCupon === codigoCupon} yield c.idEstadoCupon
+    val updateAction = q.update(3)
+    db.run(updateAction)
+  }
+
   def vencio(timestamp: Timestamp): Boolean = {
     val fiveDays: Long = 5 * 24 * 60 * 60 * 1000
     timestamp.getTime + fiveDays < Calendar.getInstance().getTime.getTime

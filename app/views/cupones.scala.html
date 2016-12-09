@@ -1,0 +1,61 @@
+@()
+
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Ofertas más</title>
+        <link rel="stylesheet" type="text/css" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse navbar-static-top bg-primary" role="navigation">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand">Desarrollo de Aplicaciones en Red</a>
+            </div>
+        </nav>
+
+        <div class="container">
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h3 class="text-center">Cupones Ofertas Más</h3>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-3 col-sm-offset-4">
+                    <input class="form-control" type="text" placeholder="Código de cupon" id="busqueda">
+                </div>
+                <div class="col-sm-2">
+                    <input type="button" id="btnSubmit" value="Buscar" class="btn btn-primary">
+                </div>
+            </div>
+
+            <div class="row">
+                <br><br>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="tableCupon">
+                        <thead>
+                            <tr>
+                                <th>Código de cupón</th>
+                                <th>Fecha de creación</th>
+                                <th>Id oferta</th>
+                                <th>Id usuario</th>
+                                <th>Id estado del cupón</th>
+                                <th colspan="2">Operaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
+    </body>
+</html>

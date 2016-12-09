@@ -33,7 +33,7 @@ class CuponController @Inject()(cuponRepo: CuponRepo)
     queryAction(cuponRepo, "Cupon no encontrado")(_.codigoCupon === codigoCupon)
   }
 
-  def nuevoCupon: Action[_root_.model.entities.Tables.CuponRow] = Action.async(circe.json[CuponRow]) { request =>
+  def nuevoCupon: Action[CuponRow] = Action.async(circe.json[CuponRow]) { request =>
     cuponRepo.queryIfExists(c =>
       c.idUsuario === request.body.idUsuario && c.idOferta === request.body.idOferta).flatMap { b =>
         if (b) Future.successful(Ok(Mensaje(error = true, "El usuario ya genero un cupon para esta oferta").asJson.noSpaces))
@@ -44,6 +44,15 @@ class CuponController @Inject()(cuponRepo: CuponRepo)
   def cuponesPorUsuario(correoUsuario: String): Action[AnyContent] = Action.async { request =>
     cuponRepo.updateVigencia(correoUsuario).flatMap { _ =>
       queryAllAction(cuponRepo)(_.idUsuario === correoUsuario)
+    }
+  }
+
+  def canjear: Action[AnyContent] = Action.async { request =>
+    val data = request.body.asFormUrlEncoded
+    val codigoCupon = data.get("codigoCupon").map(_.toInt).head
+    cuponRepo.canjear(codigoCupon).map(_ =>
+      Ok(Mensaje(error = false, "Cupon canjeado").asJson.noSpaces)).recover {
+      case cause => Ok(Mensaje(error = false, cause.getMessage).asJson.noSpaces)
     }
   }
 

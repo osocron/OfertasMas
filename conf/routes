@@ -19,6 +19,7 @@ GET     /api/cupones                            controllers.CuponController.cupo
 GET     /api/cupon/:codigoCupon                 controllers.CuponController.cupon(codigoCupon: Int)
 GET     /api/cuponesPorUsuario/:correoUsuario   controllers.CuponController.cuponesPorUsuario(correoUsuario: String)
 POST    /api/cupon                              controllers.CuponController.nuevoCupon
+POST    /api/cupon/canjear                      controllers.CuponController.canjear
 
 # Empresas
 GET     /api/empresas                       controllers.EmpresasController.empresas
@@ -48,6 +49,9 @@ GET     /api/usuarios                       controllers.UsuarioController.usuari
 GET     /api/usuario/:correo                controllers.UsuarioController.usuario(correo: String)
 POST    /api/usuario                        controllers.UsuarioController.nuevoUsuario
 POST    /api/login                          controllers.UsuarioController.login
+
+# Canjear Cupones
+GET     /app/canjeador                     controllers.CanjearCupones.canjearCupones
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file                       controllers.Assets.at(path="/public", file)
