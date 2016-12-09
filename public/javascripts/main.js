@@ -31,9 +31,6 @@ $(document).ready(function () {
                alert(thrownError);
            }
        });
-       $(document).on('click', '#btnCanjear', function() {
-
-       });
        function canjear () {
            $.ajax({
                url : '/api/cupon/canjear',
