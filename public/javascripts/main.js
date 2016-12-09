@@ -8,6 +8,18 @@ $(document).ready(function () {
            dataType : 'json',
            success : function (data) {
                if (data.codigoCupon !== undefined) {
+                   var estadoCupon;
+                   switch (data.idEstadoCupon) {
+                       case 1:
+                           estadoCupon = "Disponible";
+                           break;
+                       case 2:
+                           estadoCupon = "Caducado";
+                           break;
+                       case 3:
+                           estadoCupon = "Canjeado";
+                           break;
+                   }
                    $('#tableCupon tbody').empty();
                    table.append(
                        '<tr>' +
@@ -15,7 +27,7 @@ $(document).ready(function () {
                        '<td>' + data.fechaCreacion + '</td>' +
                        '<td>' + data.idOferta + '</td>' +
                        '<td>' + data.idUsuario + '</td>' +
-                       '<td id="estadoCupon">' + data.idEstadoCupon + '</td>' +
+                       '<td id="estadoCupon">' + estadoCupon + '</td>' +
                        '<td><input type="submit" value="canjear" id="btnCanjear" class="btn btn-success"></td>' +
                        '</tr>');
                    document.getElementById("btnCanjear").addEventListener("click", canjear, false);
@@ -41,7 +53,7 @@ $(document).ready(function () {
                success : function (data) {
                    if (!data.error) {
                        $('#btnCanjear').removeClass('btn-success').addClass('btn-danger').prop('disabled', true);
-                       $('#estadoCupon').html('3');
+                       $('#estadoCupon').html('Canjeado');
                    } else {
                        alert(data.mensaje);
                    }
