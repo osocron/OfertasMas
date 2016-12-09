@@ -16,7 +16,7 @@ $(document).ready(function () {
                        '<td>' + data.idOferta + '</td>' +
                        '<td>' + data.idUsuario + '</td>' +
                        '<td id="estadoCupon">' + data.idEstadoCupon + '</td>' +
-                       '<td><input type="submit" value="canjear" id="btnCanjear" class="btn btn-success" onclick="canjear()"></td>' +
+                       '<td><input type="submit" value="canjear" id="btnCanjear" class="btn btn-success"></td>' +
                        '</tr>');
                    document.getElementById("btnCanjear").addEventListener("click", canjear, false);
                    if (data.idEstadoCupon != 1) {
@@ -30,6 +30,9 @@ $(document).ready(function () {
                alert(xhr.status);
                alert(thrownError);
            }
+       });
+       $(document).on('click', '#btnCanjear', function() {
+
        });
        function canjear () {
            $.ajax({
